@@ -3,13 +3,13 @@
 ## Repo structure
 
 ### Task_1_Array_Sum/
-Array_sum.c
- Makefile
+* Array_sum.c
+* Makefile
 ### Task_2_SPSC_Ring/
-spsc_ring.c
+* spsc_ring.c
 ### Task_3_Forest_Fire/
-main.c
-forest_fire.comp
+* main.c
+* forest_fire.comp
 
 ## Tasks
 
@@ -43,19 +43,19 @@ Simulation Rules:
 
 ### Task 1
 Open the folder and run these commands in terminal
-make 
-./Array_sum
+* make 
+* ./Array_sum
 
 ### Task 2
 Open the folder and run these commands in terminal
-gcc -std=c11 -pthread spsc_ring.c -o spsc_ring
-./spsc_ring
+* gcc -std=c11 -pthread spsc_ring.c -o spsc_ring
+* ./spsc_ring
 
 ### task 3
 Install the dependencies 
-pkg update && pkg install clang make libandroid-gl-dev
+* pkg update && pkg install clang make libandroid-gl-dev
 
 Open the folder in terminal and run these commands
-clang main.c -O3 -lEGL -lGLESv3 -o forest_fire
-./forest_fire 15
+* clang main.c -O3 -lEGL -lGLESv3 -o forest_fire
+* ./forest_fire 15
 
