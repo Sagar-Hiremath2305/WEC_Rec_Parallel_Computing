@@ -1,0 +1,63 @@
+#version 310 es
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(std430, binding = 0) readonly buffer InputGrid {
+    int in_grid[];
+};
+
+layout(std430, binding = 1) writeonly buffer OutputGrid {
+    int out_grid[];
+};
+
+uniform int u_grid_size;
+uniform uint u_seed;
+
+// Hash-based pseudo-random number generator for GPU
+uint hash(uint n) {
+    n = (n << 13U) ^ n;
+    n = n * (n * n * 15731U + 789221U) + 1376312589U;
+    return n;
+}
+
+float random_float(uint seed, ivec2 coord) {
+    uint n = uint(coord.y * u_grid_size + coord.x) + seed * 1999U;
+    return float(hash(n) & 0x00FFFFFFU) / float(0x00FFFFFFU);
+}
+
+void main() {
+    ivec2 coords = ivec2(gl_GlobalInvocationID.xy);
+    if (coords.x >= u_grid_size || coords.y >= u_grid_size) return;
+
+    int idx = coords.y * u_grid_size + coords.x;
+    int state = in_grid[idx];
+    int new_state = state;
+
+    if (state == 2) {
+        // Burning (B) -> Nothing (N)
+        new_state = 0;
+    } else if (state == 1) {
+        // Healthy (H) -> Check 8 neighbors for Burning (B)
+        bool has_burning_neighbor = false;
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                if (dx == 0 && dy == 0) continue;
+                ivec2 n_coord = coords + ivec2(dx, dy);
+                if (n_coord.x >= 0 && n_coord.x < u_grid_size && n_coord.y >= 0 && n_coord.y < u_grid_size) {
+                    int n_idx = n_coord.y * u_grid_size + n_coord.x;
+                    if (in_grid[n_idx] == 2) {
+                        has_burning_neighbor = true;
+                    }
+                }
+            }
+        }
+
+        if (has_burning_neighbor) {
+            float r = random_float(u_seed, coords);
+            if (r < 0.15) {
+                new_state = 2; // Becomes Burning (B)
+            }
+        }
+    }
+
+    out_grid[idx] = new_state;
+}
