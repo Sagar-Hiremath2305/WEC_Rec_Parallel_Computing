@@ -2,14 +2,14 @@
 
 ## Repo structure
 
-├── Task_1_Array_Sum/
-│   ├── array_sum.c
-│   └── Makefile
-├── Task_2_SPSC_Ring/
-│   └── spsc_ring.c
-└── Task_3_Forest_Fire/
-    ├── main.c
-    └── forest_fire.comp
+### Task_1_Array_Sum/
+Array_sum.c
+ Makefile
+### Task_2_SPSC_Ring/
+spsc_ring.c
+### Task_3_Forest_Fire/
+main.c
+forest_fire.comp
 
 ## Tasks
 
